@@ -157,7 +157,7 @@ Sources of truth for the content: `jsondb-core/CHANGELOG.md` (the 1.1.16 and 1.1
 - **Job `deploy`:** runs only on a push to `master`. It needs `build`, uses the `github-pages` environment, and runs `actions/deploy-pages`. Permissions are `pages: write` and `id-token: write`.
 - Concurrency group `pages`, which doesn't cancel a deploy already in progress.
 
-**Cut-over:** the Pages source must change from "Deploy from a branch" to "GitHub Actions". This is a repository setting, changed only with Farooq's confirmation, when the site PR is merged. The previous deployment keeps serving until the first Actions deploy succeeds.
+**Cut-over:** the Pages source must change from "Deploy from a branch" to "GitHub Actions" **before** the site PR merges. If it changed after, the legacy Jekyll builder would build the merged Astro repo and publish a broken site, and `deploy-pages` would fail. The previous deployment keeps serving until the first Actions deploy succeeds, so switching early is safe. It's a repository setting, so it's changed only with Farooq's confirmation.
 
 ## Repository hygiene (#80)
 
@@ -181,8 +181,8 @@ Sources of truth for the content: `jsondb-core/CHANGELOG.md` (the 1.1.16 and 1.1
 
 1. `jsondb-core` PR: Dependabot and issue templates. It's independent of everything else.
 2. Site PR on branch `website-overhaul`: this spec, the new site, the site's Dependabot config.
-3. After Farooq merges the site PR, each step confirmed first:
-   - switch Pages to Actions;
+3. Before Farooq merges the site PR, with his confirmation: switch Pages to Actions.
+4. After he merges it, each step confirmed first:
    - check the live site;
    - apply branch protection;
    - close #80.
