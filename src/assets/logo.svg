@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>JsonDB</title>
+  <defs>
+    <linearGradient id="jdb-tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#818cf8"/>
+      <stop offset=".55" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#4338ca"/>
+    </linearGradient>
+    <linearGradient id="jdb-shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".22"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#jdb-tile)"/>
+  <rect width="64" height="64" rx="14" fill="url(#jdb-shine)"/>
+  <g fill="none" stroke="#fff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 14C15 14 15 17 15 22V27.5C15 30.2 13.6 32 11 32C13.6 32 15 33.8 15 36.5V42C15 47 15 50 20 50"/>
+    <path d="M44 14C49 14 49 17 49 22V27.5C49 30.2 50.4 32 53 32C50.4 32 49 33.8 49 36.5V42C49 47 49 50 44 50"/>
+  </g>
+  <path d="M21.5 22V42A10.5 4.2 0 0 0 42.5 42V22Z" fill="#fff"/>
+  <ellipse cx="32" cy="22" rx="10.5" ry="4.2" fill="#a5b4fc"/>
+  <g fill="none" stroke="#6366f1" stroke-width="2">
+    <path d="M21.5 28.7A10.5 4.2 0 0 0 42.5 28.7"/>
+    <path d="M21.5 35.3A10.5 4.2 0 0 0 42.5 35.3"/>
+  </g>
+</svg>
