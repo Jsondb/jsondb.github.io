@@ -1,0 +1,87 @@
+---
+/*
+ * Copyright (c) 2026 Farooq Khan
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+// The landing page's demo: Java code beside the users.json it writes.
+// The file contents are real output from JsonDB 1.1.16 running this code.
+import { Code } from '@astrojs/starlight/components';
+
+const java = `@Document(collection = "users", schemaVersion = "1.0")
+public class User {
+  @Id private String id;
+  private String name;
+  private String email;
+  private int age;
+  // constructor, getters and setters
+}
+
+try (JsonDBTemplate db = new JsonDBTemplate(dbPath, Arrays.asList(User.class))) {
+  db.createCollection(User.class);
+  db.insert(new User("1", "Ada Lovelace", "ada@example.com", 36));
+  db.insert(new User("2", "Alan Turing", "alan@example.com", 41));
+
+  List<User> found = db.find("/.[age > 40]", User.class); // Alan Turing
+}`;
+
+const json = `{"schemaVersion":"1.0"}
+{"id":"1","name":"Ada Lovelace","email":"ada@example.com","age":36}
+{"id":"2","name":"Alan Turing","email":"alan@example.com","age":41}`;
+---
+
+<div class="jdb-demo not-content">
+  <div class="jdb-demo-code">
+    <p class="jdb-demo-label">Your code</p>
+    <Code code={java} lang="java" title="Example.java" />
+  </div>
+  <div class="jdb-demo-file">
+    <p class="jdb-demo-label">What's on disk</p>
+    <Code code={json} lang="json" title="my-db/users.json" />
+    <p class="jdb-demo-note">One readable line per document. Diff it, back it up, open it in any editor.</p>
+  </div>
+</div>
+
+<style>
+  .jdb-demo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+    margin-block: 1rem 2rem;
+  }
+  @media (max-width: 50rem) {
+    .jdb-demo {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .jdb-demo-label {
+    margin: 0 0 0.5rem;
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+  }
+  .jdb-demo-note {
+    margin: 0.75rem 0 0;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+</style>

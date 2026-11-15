@@ -1,0 +1,104 @@
+---
+title: Quick start
+description: Define a document class, open a database, and insert and query data, in one short program.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+This page builds a complete program that stores users in JsonDB and queries them. You need Java 8 or later and JsonDB [on the classpath](/start/installation/).
+
+<Steps>
+
+1. **Define a document class.**
+
+   A document class is a plain Java class with a no-argument constructor and getters and setters. `@Document` names the collection, and so the file, it's stored in. `@Id` marks the field that identifies each document.
+
+   ```java title="User.java"
+   import io.jsondb.annotation.Document;
+   import io.jsondb.annotation.Id;
+
+   @Document(collection = "users", schemaVersion = "1.0")
+   public class User {
+     @Id
+     private String id;
+     private String name;
+     private String email;
+     private int age;
+
+     public User() { }
+
+     public User(String id, String name, String email, int age) {
+       this.id = id;
+       this.name = name;
+       this.email = email;
+       this.age = age;
+     }
+
+     public String getId() { return id; }
+     public void setId(String id) { this.id = id; }
+     public String getName() { return name; }
+     public void setName(String name) { this.name = name; }
+     public String getEmail() { return email; }
+     public void setEmail(String email) { this.email = email; }
+     public int getAge() { return age; }
+     public void setAge(int age) { this.age = age; }
+   }
+   ```
+
+2. **Open the database.**
+
+   A `JsonDBTemplate` is your handle on one database folder. Give it the folder path and your document classes. It creates the folder if it doesn't exist. Use try-with-resources so it's closed when you're done.
+
+   ```java "Arrays.asList(User.class)"
+   String dbPath = "/path/to/my-db";
+
+   try (JsonDBTemplate db = new JsonDBTemplate(dbPath, Arrays.asList(User.class))) {
+     // the steps below go here
+   }
+   ```
+
+3. **Create the collection, once.**
+
+   ```java
+   if (!db.collectionExists(User.class)) {
+     db.createCollection(User.class);
+   }
+   ```
+
+4. **Insert, query and count.**
+
+   ```java
+   db.insert(new User("1", "Ada Lovelace", "ada@example.com", 36));
+   db.insert(new User("2", "Alan Turing", "alan@example.com", 41));
+
+   List<User> over40 = db.find("/.[age > 40]", User.class);
+   System.out.println(over40.get(0).getName()); // Alan Turing
+
+   System.out.println(db.count(User.class));    // 2
+   ```
+
+   Queries are XPath expressions over your objects' properties: `/.[age > 40]` means "every document whose `age` is greater than 40". See [Querying with XPath](/guides/queries/).
+
+5. **Look at the file.**
+
+   The folder now holds `users.json`. The first line records the schema version, and each line after it is one document:
+
+   ```json title="/path/to/my-db/users.json"
+   {"schemaVersion":"1.0"}
+   {"id":"1","name":"Ada Lovelace","email":"ada@example.com","age":36}
+   {"id":"2","name":"Alan Turing","email":"alan@example.com","age":41}
+   ```
+
+</Steps>
+
+Run the program a second time and `insert` fails, because documents with ids `1` and `2` already exist. Use [`upsert`](/guides/crud/#upsert) when you want "insert or replace".
+
+:::tip[Always set an id]
+Give every document an id before you insert it. In 1.1.16, documents inserted without an id aren't stored reliably.
+:::
+
+## Where next
+
+- [Defining documents](/guides/documents/): the annotations and what a document class needs.
+- [The JsonDBTemplate](/guides/jsondbtemplate/): one instance per folder, threads, and closing.
+- [Inserting, saving and removing](/guides/crud/): every write operation.
