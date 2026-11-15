@@ -43,7 +43,7 @@ JsonDB brings in a handful of libraries: Jackson for reading and writing JSON, A
 
 JsonDB logs through [SLF4J](https://www.slf4j.org/). To see its messages, add an SLF4J binding such as Logback, or `slf4j-simple` for small programs. Without one, SLF4J prints a one-time notice and discards JsonDB's log messages; JsonDB works the same either way.
 
-Routine messages are logged at `DEBUG`, so the default settings show only warnings and errors.
+JsonDB logs its routine messages at `DEBUG`, so with the usual settings you see only its warnings and errors. (When you use package scanning, the Reflections library adds one `INFO` line of its own.)
 
 ## Upgrading from 1.0.x
 
