@@ -36,4 +36,4 @@ Use operating-system file permissions to protect the database folder, and full-d
 
 ## Reporting a vulnerability
 
-Please don't put the details of a security problem in a public issue. Instead, [open an issue](https://github.com/Jsondb/jsondb-core/issues/new) saying only that you have a security report, and the maintainer will arrange a private way to share the details.
+Please report security problems privately, not in a public issue. Use the **Report a vulnerability** button on the [jsondb-core Security tab](https://github.com/Jsondb/jsondb-core/security). Only the maintainers see the report.
