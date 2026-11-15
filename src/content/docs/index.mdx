@@ -1,0 +1,70 @@
+---
+title: Embedded Java database stored as JSON files
+description: JsonDB is an embedded Java database that stores its data as plain JSON files, with XPath queries and optional field encryption. Java 8+, Android and OSGi.
+template: splash
+hero:
+  title: A database that's <span class="jdb-grad">just JSON files</span>
+  tagline: JsonDB is an embedded Java database. It keeps your data in memory, saves it as plain .json files you can read, diff and back up, queries it with XPath, and can encrypt the fields you mark secret.
+  image:
+    file: ../../assets/logo.svg
+    alt: JsonDB logo
+  actions:
+    - text: Get started
+      link: /start/quick-start/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/Jsondb/jsondb-core
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+import CodeAndFile from '../../components/CodeAndFile.astro';
+
+<div class="jdb-install not-content">
+  <p class="jdb-pill">v1.1.16 · Java 8+ · Android &amp; OSGi · MIT licensed</p>
+</div>
+
+<Tabs syncKey="build">
+  <TabItem label="Gradle">
+    ```kotlin
+    implementation("io.jsondb:jsondb-core:1.1.16")
+    ```
+  </TabItem>
+  <TabItem label="Maven">
+    ```xml
+    <dependency>
+      <groupId>io.jsondb</groupId>
+      <artifactId>jsondb-core</artifactId>
+      <version>1.1.16</version>
+    </dependency>
+    ```
+  </TabItem>
+</Tabs>
+
+## Why JsonDB
+
+<CardGrid>
+  <Card title="Plain JSON on disk" icon="seti:json">
+    One readable file per collection, one line per document. No server, no binary format, nothing to install.
+  </Card>
+  <Card title="XPath queries" icon="magnifier">
+    Find, sort, slice, count and update documents with [JXPath](/guides/queries/) expressions over your own classes.
+  </Card>
+  <Card title="Field encryption" icon="seti:lock">
+    Mark a field [`@Secret`](/guides/encryption/) and it's encrypted with AES-GCM before it reaches the disk.
+  </Card>
+  <Card title="Schema versions" icon="random">
+    [Rename, add and remove](/guides/schema-versions/) fields safely. Migrations that would lose data are refused.
+  </Card>
+  <Card title="Backup and restore" icon="download">
+    [Zip](/guides/backup-restore/) the whole database in one call, and restore it by replacing or merging.
+  </Card>
+  <Card title="Runs anywhere Java runs" icon="rocket">
+    Java 8 and later, [Android API 26+ and OSGi](/guides/android-osgi/). Thread-safe and `AutoCloseable`.
+  </Card>
+</CardGrid>
+
+## See it work
+
+<CodeAndFile />

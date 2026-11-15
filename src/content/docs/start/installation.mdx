@@ -1,0 +1,55 @@
+---
+title: Installation
+description: Add JsonDB to a Gradle or Maven project. One artifact, Java 8 and later.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+JsonDB is published to Maven Central as **`io.jsondb:jsondb-core`**. The current release is **1.1.16**, and it runs on **Java 8 and later**. One artifact covers every Java version, Android, and OSGi.
+
+<Tabs syncKey="build">
+  <TabItem label="Gradle (Kotlin)">
+    ```kotlin title="build.gradle.kts"
+    dependencies {
+        implementation("io.jsondb:jsondb-core:1.1.16")
+    }
+    ```
+  </TabItem>
+  <TabItem label="Gradle (Groovy)">
+    ```groovy title="build.gradle"
+    dependencies {
+        implementation 'io.jsondb:jsondb-core:1.1.16'
+    }
+    ```
+  </TabItem>
+  <TabItem label="Maven">
+    ```xml title="pom.xml"
+    <dependency>
+      <groupId>io.jsondb</groupId>
+      <artifactId>jsondb-core</artifactId>
+      <version>1.1.16</version>
+    </dependency>
+    ```
+  </TabItem>
+</Tabs>
+
+Make sure `mavenCentral()` is in your Gradle `repositories` block. Maven uses Central by default.
+
+## What comes with it
+
+JsonDB brings in a handful of libraries: Jackson for reading and writing JSON, Apache Commons JXPath for queries, Reflections for package scanning, Guava, and the SLF4J API. Your build tool resolves them for you. That's why a build tool is the recommended way to add JsonDB, rather than copying a jar by hand.
+
+## Logging
+
+JsonDB logs through [SLF4J](https://www.slf4j.org/). To see its messages, add an SLF4J binding such as Logback, or `slf4j-simple` for small programs. Without one, SLF4J prints a one-time notice and discards JsonDB's log messages; JsonDB works the same either way.
+
+JsonDB logs its routine messages at `DEBUG`, so with the usual settings you see only its warnings and errors. (When you use package scanning, the Reflections library adds one `INFO` line of its own.)
+
+## Upgrading from 1.0.x
+
+The last 1.0 release was published as two builds, `1.0.115-j8` and `1.0.115-j11`. From 1.1.0 there's one build for every Java version from 8 on. See [Upgrading from 1.0.x](/reference/upgrading/) for that and the other changes to check.
+
+## Next
+
+- [Quick start](/start/quick-start/): a complete program.
+- [Android and OSGi](/guides/android-osgi/): one extra step on those platforms.

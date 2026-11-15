@@ -1,0 +1,117 @@
+/*
+ * Copyright (c) 2026 Farooq Khan
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/* "Electric Indigo": indigo accent on zinc greys, cyan as the secondary highlight. */
+
+/* Dark theme (Starlight's default). */
+:root {
+  --sl-color-accent-low: #1e1b4b;
+  --sl-color-accent: #6366f1;
+  --sl-color-accent-high: #a5b4fc;
+
+  --sl-color-white: #fafafa;
+  --sl-color-gray-1: #f4f4f5;
+  --sl-color-gray-2: #d4d4d8;
+  --sl-color-gray-3: #a1a1aa;
+  --sl-color-gray-4: #71717a;
+  --sl-color-gray-5: #27272a;
+  --sl-color-gray-6: #18181b;
+  --sl-color-black: #09090b;
+
+  --sl-color-bg-nav: #0c0c0f;
+  --sl-color-bg-sidebar: #0c0c0f;
+
+  --jdb-cyan: #67e8f9;
+  --jdb-grad: linear-gradient(90deg, #a5b4fc 0%, #67e8f9 100%);
+  --jdb-glow-1: rgb(79 70 229 / 0.35);
+  --jdb-glow-2: rgb(34 211 238 / 0.14);
+}
+
+/* Light theme. */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e0e7ff;
+  --sl-color-accent: #4f46e5;
+  --sl-color-accent-high: #3730a3;
+
+  --sl-color-white: #18181b;
+  --sl-color-gray-1: #27272a;
+  --sl-color-gray-2: #3f3f46;
+  --sl-color-gray-3: #52525b;
+  --sl-color-gray-4: #71717a;
+  --sl-color-gray-5: #d4d4d8;
+  --sl-color-gray-6: #f4f4f5;
+  --sl-color-gray-7: #fafafa;
+  --sl-color-black: #ffffff;
+
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #fafafa;
+
+  --jdb-cyan: #0e7490;
+  --jdb-grad: linear-gradient(90deg, #4f46e5 0%, #0e7490 100%);
+  --jdb-glow-1: rgb(99 102 241 / 0.16);
+  --jdb-glow-2: rgb(14 116 144 / 0.08);
+}
+
+/* Landing page. */
+.jdb-grad {
+  background: var(--jdb-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-has-hero] .page {
+  background:
+    radial-gradient(60rem 28rem at 85% -6rem, var(--jdb-glow-1), transparent 70%),
+    radial-gradient(40rem 22rem at 0% 32rem, var(--jdb-glow-2), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+[data-has-hero] .hero > img {
+  width: min(70%, 15rem);
+  filter: drop-shadow(0 1.5rem 3rem rgb(79 70 229 / 0.35));
+}
+
+.hero h1 {
+  letter-spacing: -0.025em;
+}
+
+.jdb-install {
+  display: flex;
+  justify-content: center;
+}
+
+.jdb-pill {
+  display: inline-block;
+  margin: 0;
+  padding: 0.25rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sl-color-accent-low) 60%, transparent);
+  color: var(--sl-color-text-accent);
+  font-size: var(--sl-text-sm);
+  font-weight: 500;
+}
+
+:root {
+  --sl-font: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --sl-font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
