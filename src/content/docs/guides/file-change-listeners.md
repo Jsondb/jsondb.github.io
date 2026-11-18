@@ -48,8 +48,4 @@ db.removeCollectionFileChangeListener(listener);
 db.hasCollectionFileChangeListener(); // false when none are left
 ```
 
-Removing the last listener stops the watcher thread. [Closing the template](/guides/jsondbtemplate/#closing) stops it too.
-
-:::caution[Re-adding listeners in 1.1.16]
-In 1.1.16, if you remove the last listener and then add one again, the watcher doesn't restart and the new listener receives no events. Keep at least one listener registered for as long as you need events, or create a new `JsonDBTemplate`.
-:::
+Removing the last listener stops the watcher thread, and adding one again restarts it. [Closing the template](/guides/jsondbtemplate/#closing) stops it too.

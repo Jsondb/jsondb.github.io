@@ -46,7 +46,7 @@ Marks the one field that identifies a document within its collection. Every `@Do
 
 - Use JsonDB's own `io.jsondb.annotation.Id`. Another framework's annotation, such as `javax.persistence.Id`, isn't recognised: JsonDB rejects the class with an `InvalidJsonDbApiUsageException` that names it.
 - Ids are compared with `equals()`, so `String` and the boxed number types work well. Most examples use `String`.
-- Set the id yourself before inserting. In 1.1.16, documents inserted without an id aren't stored reliably.
+- If a document's id is `null` when you insert or upsert it, JsonDB stores it under a random UUID. The object you passed keeps its `null` id, so to read the document back by id you have to find it first. If you need the id, set it yourself.
 
 ## `@Secret`
 
@@ -74,4 +74,4 @@ if (!db.collectionExists(Server.class)) {
 
 `createCollection` writes the new file with its schema-version line. `dropCollection(Server.class)` deletes the file and its documents. `getCollectionNames()` lists the collections that are currently loaded.
 
-Every operation comes in two forms: one takes the class (`find(query, Server.class)`), and one takes the collection name (`find(query, "servers")`). Prefer the class form. It can't be misspelt, and in 1.1.16 a misspelt name makes some write operations fail with a bare `NullPointerException` instead of a clear error.
+Every operation comes in two forms: one takes the class (`find(query, Server.class)`), and one takes the collection name (`find(query, "servers")`). Prefer the class form. It can't be misspelt; a misspelt name fails at run time with an `InvalidJsonDbApiUsageException`.
