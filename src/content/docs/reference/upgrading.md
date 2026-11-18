@@ -1,20 +1,20 @@
 ---
-title: Upgrading from 1.0.x
-description: What to change, and what behaves differently, when moving from JsonDB 1.0.x to 1.1.16.
+title: Upgrading
+description: What to change, and what behaves differently, when moving from JsonDB 1.0.x, or from 1.1.16, to 1.1.63.
 ---
 
 1.1.0 was the first release since 1.0.115 in March 2020. Most code upgrades by changing the version number, but some behaviour has changed. Check this list, especially if you build queries from user input, use `findAndModify`, or migrate schemas.
 
 ## Dependency
 
-Change the version to `1.1.16`. Drop any `-j8` or `-j11` suffix; one build now runs on Java 8 and later:
+Change the version to `1.1.63`. Drop any `-j8` or `-j11` suffix; one build now runs on Java 8 and later:
 
 ```diff lang="xml"
  <dependency>
    <groupId>io.jsondb</groupId>
    <artifactId>jsondb-core</artifactId>
 -  <version>1.0.115-j11</version>
-+  <version>1.1.16</version>
++  <version>1.1.63</version>
  </dependency>
 ```
 
@@ -49,7 +49,7 @@ See [Schema versions](/guides/schema-versions/).
 ### Errors that used to be hidden now surface
 
 - A collection file that exists but can't be parsed is left untouched. `getCollection()` and `createCollection()` throw `InvalidJsonDbApiUsageException` for it, instead of replacing it with an empty file.
-- A write whose final file move fails throws `JsonDBException` instead of appearing to succeed.
+- A write that can't be saved throws `JsonDBException` instead of appearing to succeed, and leaves the collection unchanged. This covers a failed final file move and, from 1.1.63, an unavailable lock or a temporary file that can't be created (in a read-only folder, for example). The remove methods used to return `null` in those cases, as if nothing had matched.
 - A `@Document` class without JsonDB's own `@Id`, for example one using `javax.persistence.Id`, fails with an `InvalidJsonDbApiUsageException` naming the class, instead of a `NullPointerException`.
 
 ### Quieter logging
@@ -67,6 +67,7 @@ JsonDB logs a warning when a second `JsonDBTemplate` opens a folder that's alrea
 - **`count()`**, instead of `findAll(...).size()`.
 - **[`backup()` and `restore()`](/guides/backup-restore/)** to and from zip files.
 - **`remove(object)`** without the class argument.
+- **[`setSyncFolderOnWrite(true)`](/guides/jsondbtemplate/#surviving-a-crash)**, if a write that has returned must survive a power cut.
 
 ## Bugs fixed
 
@@ -76,5 +77,13 @@ These fixes need no change to your code, but they may explain odd behaviour you 
 - A collection file with one bad line could be emptied by a later `getCollection()`.
 - A thread that lost the race to create a collection could hang it.
 - Merge-restore encrypted `@Secret` fields twice on encrypted databases.
+- Documents inserted without an id could be lost, and a batch of them failed with "Duplicate object with id: null" (fixed in 1.1.63).
+- A crash shortly after a write could leave a collection file empty or partly written (fixed in 1.1.63).
+- A misspelt collection name given to `insert`, `save`, `upsert` or `remove` threw a bare `NullPointerException` (fixed in 1.1.63).
+- A file-change listener added after the last one was removed received no events (fixed in 1.1.63).
+
+## From 1.1.16
+
+Change the version to `1.1.63`. Every fix marked 1.1.63 above applies to you. The one change to check for is that writes which can't be saved now throw `JsonDBException` instead of returning normally; see [Errors that used to be hidden now surface](#errors-that-used-to-be-hidden-now-surface).
 
 The [changelog](https://github.com/Jsondb/jsondb-core/blob/master/CHANGELOG.md) has the full list.

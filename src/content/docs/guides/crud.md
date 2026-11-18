@@ -18,6 +18,8 @@ The examples use the `User` class from the [quick start](/start/quick-start/).
 
 "Fails" means an `InvalidJsonDbApiUsageException` (a `RuntimeException`), and nothing is written.
 
+Any write can also fail because JsonDB can't save the file, for example when the database folder is read-only. It then throws `JsonDBException`, also a `RuntimeException`, and the collection is left as it was, both in memory and on disk. This applies to `findAndModify` and the other [query-based writes](/guides/find-and-modify/) too.
+
 ## insert
 
 ```java
@@ -95,11 +97,7 @@ int total = db.count(User.class);
 
 ## By class or by collection name
 
-Every method has a form that takes the collection name instead of the class, such as `db.insert(user, "users")` and `db.findAll("users")`. Prefer the class form.
-
-:::caution[Misspelt collection names in 1.1.16]
-In 1.1.16, `insert`, `save`, `upsert` and `remove` given a collection name that no `@Document` class has (a typo such as `"usres"`) fail with a bare `NullPointerException`. The read methods fail with `InvalidJsonDbApiUsageException: Collection by name 'usres' not found`. The class form avoids both.
-:::
+Every method has a form that takes the collection name instead of the class, such as `db.insert(user, "users")` and `db.findAll("users")`. Prefer the class form: it can't be misspelt. A name that no `@Document` class has, such as `"usres"`, fails with `InvalidJsonDbApiUsageException: Collection by name 'usres' not found`.
 
 ## Read-only collections
 

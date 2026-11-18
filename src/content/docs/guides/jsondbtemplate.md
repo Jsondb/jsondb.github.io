@@ -71,6 +71,18 @@ For a long-lived template, call `close()` when your application shuts down. Clos
 
 Data is never waiting to be written: every write has already reached the file by the time the method returns. Closing releases resources; it doesn't flush anything.
 
+## Surviving a crash
+
+JsonDB writes each change to a temporary file, forces that file to disk, and then renames it over the collection file. A crash or power loss part-way through leaves either the old file or the new one, never a partial one.
+
+The rename itself can still be lost: after a power cut, a write that had already returned may be missing, with the file as it was before that write. If your application can't accept that, turn on folder syncing (new in 1.1.63):
+
+```java
+db.setSyncFolderOnWrite(true);
+```
+
+After every write, JsonDB then also forces the database folder to disk, so a write that has returned survives a crash. It makes writes several times slower, so it's off by default. Not every platform can sync a folder; Windows can't, and there the setting has no effect.
+
 ## Reloading from disk
 
 JsonDB assumes it's the only writer of its folder. If another program changes the files, reload them:

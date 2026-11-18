@@ -3,7 +3,7 @@ title: XPath cheat sheet
 description: Common JsonDB query patterns at a glance.
 ---
 
-Every query below has been run against JsonDB 1.1.16. Pass it to `find`, `findOne`, `findAndModify`, `findAllAndModify`, `findAndRemove` or `findAllAndRemove`. See [Querying with XPath](/guides/queries/) for the explanations.
+Every query below has been run against JsonDB 1.1.63. Pass it to `find`, `findOne`, `findAndModify`, `findAllAndModify`, `findAndRemove` or `findAllAndRemove`. See [Querying with XPath](/guides/queries/) for the explanations.
 
 ## Matching
 

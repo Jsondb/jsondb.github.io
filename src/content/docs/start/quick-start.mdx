@@ -93,10 +93,6 @@ This page builds a complete program that stores users in JsonDB and queries them
 
 Run the program a second time and `insert` fails, because documents with ids `1` and `2` already exist. Use [`upsert`](/guides/crud/#upsert) when you want "insert or replace".
 
-:::tip[Always set an id]
-Give every document an id before you insert it. In 1.1.16, documents inserted without an id aren't stored reliably.
-:::
-
 ## Where next
 
 - [Defining documents](/guides/documents/): the annotations and what a document class needs.
