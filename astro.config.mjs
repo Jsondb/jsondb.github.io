@@ -70,7 +70,7 @@ export default defineConfig({
             'reference/xpath-cheatsheet',
             'reference/upgrading',
             'reference/security',
-            { label: 'Javadoc', link: 'https://javadoc.io/doc/io.jsondb/jsondb-core/1.1.63/', attrs: { target: '_blank' } },
+            { label: 'Javadoc', link: 'https://javadoc.io/doc/io.jsondb/jsondb-core/1.1.93/', attrs: { target: '_blank' } },
             { label: 'Changelog', link: 'https://github.com/Jsondb/jsondb-core/blob/master/CHANGELOG.md', attrs: { target: '_blank' } },
             { label: 'Releases', link: 'https://github.com/Jsondb/jsondb-core/releases', attrs: { target: '_blank' } },
           ],
