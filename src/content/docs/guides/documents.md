@@ -46,7 +46,7 @@ Marks the one field that identifies a document within its collection. Every `@Do
 
 - Use JsonDB's own `io.jsondb.annotation.Id`. Another framework's annotation, such as `javax.persistence.Id`, isn't recognised: JsonDB rejects the class with an `InvalidJsonDbApiUsageException` that names it.
 - Ids are compared with `equals()`, so `String` and the boxed number types work well. Most examples use `String`.
-- If a document's id is `null` when you insert or upsert it, JsonDB stores it under a random UUID. The object you passed keeps its `null` id, so to read the document back by id you have to find it first. If you need the id, set it yourself.
+- If a document has no id when you insert or upsert it, JsonDB generates one. A `String` id gets a random UUID. A `Long`, `Integer`, `long` or `int` id gets the next number after the highest id in the collection, starting at 1; for `long` and `int`, 0 counts as no id. The numbers aren't a sequence: if the document with the highest id is removed, that id is handed out again. The object you passed keeps its empty id, so to read the document back by id you have to find it first. If you need the id, set it yourself.
 
 ## `@Secret`
 

@@ -18,7 +18,7 @@ The examples use the `User` class from the [quick start](/start/quick-start/).
 
 "Fails" means an `InvalidJsonDbApiUsageException` (a `RuntimeException`), and nothing is written.
 
-Any write can also fail because JsonDB can't save the file, for example when the database folder is read-only. It then throws `JsonDBException`, also a `RuntimeException`, and the collection is left as it was, both in memory and on disk. This applies to `findAndModify` and the other [query-based writes](/guides/find-and-modify/) too.
+Any write can also fail because JsonDB can't save the file, for example when the database folder stops being writable while it's open. It then throws `JsonDBException`, also a `RuntimeException`, and the collection is left as it was, both in memory and on disk. This applies to `findAndModify` and the other [query-based writes](/guides/find-and-modify/) too.
 
 ## insert
 
