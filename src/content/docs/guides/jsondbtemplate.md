@@ -1,6 +1,6 @@
 ---
 title: The JsonDBTemplate
-description: Creating a JsonDBTemplate, sharing one per database folder, and closing it.
+description: Creating a JsonDBTemplate, opening a folder on any file system or read-only, sharing one per folder, and closing it.
 sidebar:
   badge:
     text: New
@@ -40,7 +40,38 @@ Each form has variants that also take a cipher, for [encryption](/guides/encrypt
 - **`compatibilityMode`**: when `true`, properties in the files that your classes don't have are ignored instead of causing an error. You need it to load a collection written with an older version of a class; see [Schema versions](/guides/schema-versions/). The default is `false`.
 - **`schemaComparator`** decides whether a file's schema version matches the class's. Pass `null` for the default, which compares dotted numbers such as `1.0` and `1.10`.
 
+Every constructor that takes the folder as a `String` also has a version that takes a `java.nio.file.Path` (new in 1.1.93); see [A folder on any file system](#a-folder-on-any-file-system). Because of that, a literal `null` as the folder doesn't compile.
+
+For the settings that have no constructor argument, such as [read-only mode](#opening-read-only), fill in a `JsonDBConfig` and pass it to `new JsonDBTemplate(config)` (new in 1.1.93). Its constructors take the same arguments as the template's.
+
 The folder is created if it doesn't exist. Collections already in the folder are loaded when the template is created.
+
+## A folder on any file system
+
+A `Path` folder can be on any file system Java supports, not only the default one. For example, [Jimfs](https://github.com/google/jimfs) (a separate library, `com.google.jimfs:jimfs`) keeps the whole database in memory, which suits tests:
+
+```java
+FileSystem fs = Jimfs.newFileSystem(Configuration.unix());
+JsonDBTemplate db = new JsonDBTemplate(fs.getPath("/db"), Arrays.asList(User.class));
+```
+
+Nothing is written to disk. [`backup()` and `restore()`](/guides/backup-restore/#between-file-systems) take a `Path` too, so you can copy a database between memory and disk.
+
+## Opening read-only
+
+To read a database without being able to change it, for example on a read-only mount or another application's data, open it read-only (new in 1.1.93):
+
+```java
+JsonDBConfig config = new JsonDBConfig("/path/to/db", Arrays.asList(User.class), null, false, null);
+config.setReadOnly(true);
+JsonDBTemplate db = new JsonDBTemplate(config);
+```
+
+The arguments after the class list are the cipher, `compatibilityMode` and the schema comparator, as for the [constructors](#creating-one). A read-only template doesn't create lock files, so the folder doesn't have to be writable. Reads, queries, `reLoadDB()` and [`backup()`](/guides/backup-restore/) work. Everything that would change the database throws `InvalidJsonDbApiUsageException`: `insert`, `save`, `upsert` and `remove`, the [find-and-modify and find-and-remove](/guides/find-and-modify/) methods, creating and dropping collections, schema updates, `changeEncryption()` and `restore()`. `isReadOnly()` tells you whether a template is read-only.
+
+A folder JsonDB can't write to only opens this way. Opened normally, it fails with an `InvalidJsonDbApiUsageException` saying the folder isn't writable.
+
+Read-only mode is about the whole template. It's separate from a [read-only collection](/guides/crud/#read-only-collections), which is one collection whose schema version doesn't match its class.
 
 ## One instance per folder
 

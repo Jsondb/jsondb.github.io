@@ -49,6 +49,17 @@ Each document in the backup is [upserted](/guides/crud/#upsert) into the current
 
 Collections that are in the backup but not in the database are added. With encryption, merge reads the backup's encrypted fields using the current cipher, so restore with the same key the backup was made with.
 
+## Between file systems
+
+`backup()` and `restore()` also take a `java.nio.file.Path` (new in 1.1.93), with the same rules for what the path means. The database and the backup can be on different file systems, so you can back up a database kept in memory to disk, or load a disk backup into memory, for example for a test:
+
+```java
+db.backup(Paths.get("/backups/nightly.zip"));
+db.restore(Paths.get("/backups/nightly.zip"), false);
+```
+
+A merging restore unpacks the backup into a temporary folder first. For a database on the default file system that's the system's temporary folder. For any other file system, it's a folder inside the database folder, which is deleted afterwards.
+
 ## Restoring into a fresh folder
 
 A backup is an ordinary zip of `.json` files. You can also restore by unzipping it into an empty folder and opening a `JsonDBTemplate` on that folder.

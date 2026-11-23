@@ -46,7 +46,33 @@ Marks the one field that identifies a document within its collection. Every `@Do
 
 - Use JsonDB's own `io.jsondb.annotation.Id`. Another framework's annotation, such as `javax.persistence.Id`, isn't recognised: JsonDB rejects the class with an `InvalidJsonDbApiUsageException` that names it.
 - Ids are compared with `equals()`, so `String` and the boxed number types work well. Most examples use `String`.
-- If a document has no id when you insert or upsert it, JsonDB generates one. A `String` id gets a random UUID. A `Long`, `Integer`, `long` or `int` id gets the next number after the highest id in the collection, starting at 1; for `long` and `int`, 0 counts as no id. The numbers aren't a sequence: if the document with the highest id is removed, that id is handed out again. The object you passed keeps its empty id, so to read the document back by id you have to find it first. If you need the id, set it yourself.
+- If a document has no id when you insert or upsert it, JsonDB generates one; see [Generated ids](#generated-ids).
+
+### Generated ids
+
+A document inserted or upserted without an id gets one from JsonDB:
+
+| `@Id` type | Generated id |
+|---|---|
+| `String` | A random UUID. |
+| `Long`, `Integer`, `long`, `int` | The next number after the highest id in the collection, starting at 1 (new in 1.1.93). For `long` and `int`, 0 counts as no id. |
+
+The numbers are worked out from the documents, not kept as a sequence: if the document with the highest id is removed, the next insert gets that id again. They're safe for threads sharing one `JsonDBTemplate`, but not for several programs writing the same folder.
+
+The object you passed keeps its empty id. To read the document back by id, find it first, or set the id yourself.
+
+#### Your own ids
+
+To make the ids yourself, give JsonDB an `IdGenerator` (new in 1.1.93). It receives the collection name and the document, so it can build the id from the document's fields. Set one for a class, or as the default for every class that has none of its own:
+
+```java
+db.setIdGenerator(Order.class, (collection, order) -> "ORD-" + ((Order) order).getNumber());
+db.setIdGenerator((collection, document) -> UUID.randomUUID().toString().substring(0, 8));
+```
+
+`IdGenerator` is in `io.jsondb`, and `JsonDBConfig` has the same two setters. Pass `null` to go back to the default generator, or to JsonDB's own ids. A generator is used only for documents that have no id; one that already has an id keeps it.
+
+JsonDB doesn't ask the generator twice. An id that's `null`, isn't of the `@Id` field's type, or is already in the collection is rejected with `InvalidJsonDbApiUsageException`, and nothing is saved. Calls for one collection never overlap, but a generator shared by several collections can be called from several threads at once, so make it thread-safe.
 
 ## `@Secret`
 
